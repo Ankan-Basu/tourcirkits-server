@@ -1,6 +1,6 @@
 const express = require('express');
-const {connectToDB, client} = require('./db');
-const {convertCase} = require('./convertCase');
+const {connectToDB, client} = require('./utility/db');
+const {convertCase} = require('./utility/convertCase');
 const topSightsScraper = require('./scraper/topSights');
 const path = require('path');
 
