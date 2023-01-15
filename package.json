@@ -1,0 +1,25 @@
+{
+  "name": "tourcirkits-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ankan-Basu/tourcirkits-server.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ankan-Basu/tourcirkits-server/issues"
+  },
+  "homepage": "https://github.com/Ankan-Basu/tourcirkits-server#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongodb": "^4.13.0",
+    "selenium-webdriver": "^4.7.1"
+  }
+}
