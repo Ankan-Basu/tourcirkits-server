@@ -1,7 +1,9 @@
 const {Builder, By, Key, until} = require('selenium-webdriver');
+const chrome = require('selenium-webdriver/chrome');
+
 
 const scrap = async (dest) => {
-  const driver = await new Builder().forBrowser('chrome').build();
+  const driver = await new Builder().forBrowser('chrome').setChromeOptions(new chrome.Options().headless()).build();
   try {
     await driver.get('https://www.google.com/travel/');
     
@@ -54,5 +56,7 @@ const scrap = async (dest) => {
   }
 }
 
+// scrap('Jamshedpur').then( resp => console.log(resp))
+// .catch( err => console.log(err));
 module.exports = scrap;
 
