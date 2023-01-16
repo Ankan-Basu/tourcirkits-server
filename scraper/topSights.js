@@ -1,64 +1,82 @@
-const {Builder, By, Key, until} = require('selenium-webdriver');
-const chrome = require('selenium-webdriver/chrome');
-// const firefox = require('selenium-webdriver/firefox');
-// require('geckodriver');
-require('chromedriver');
+const puppeteer = require('puppeteer');
 
 const scrap = async (dest) => {
-  const driver = await new Builder().forBrowser('chrome').setChromeOptions(new chrome.Options().headless()).build();
+  let browser = undefined;
   try {
-    await driver.get('https://www.google.com/travel/');
+    browser = await puppeteer.launch({
+      // headless: false,
+      defaultViewport: false
+    });
+
+    const page = await browser.newPage();
+    await page.goto('https://www.google.com/travel/');
+
+    const searchXpathInactive = '/html/body/c-wiz[2]/div/div[2]/div/c-wiz/div[1]/div/div[1]/div[1]/div[2]/div/div/div/div[1]/div/div/div[2]/input';
+
+    // const searchXpathActive = '//*[@id="ow21"]/div[2]/div[2]/div/div[2]/input';
+
+    // await page.waitForSelector('xpath/' + searchXpathInactive, { timeout: 5000 });
+    await page.click('xpath/' + (searchXpathInactive));
+    // await page.type('xpath/'+(searchXpathActive), 'Sikkim');
+    await page.keyboard.type(dest)
+
+    const [response] = await Promise.all([
+      page.waitForNavigation(), // The promise resolves after navigation has finished
+      page.keyboard.press('Enter')
+      // page.click('a.my-link'), // Clicking the link will indirectly cause a navigation
+    ]);
+
     
-    const searchXpath = '//*[@id="ow21"]/div[2]/div[2]/div/div[2]/input';
-
-    // const searchXpath2 = '//input[@class="II2One j0Ppje zmMKJ LbIaRd"]';
-
-    const searchBox = await driver.wait(until.elementLocated(By.xpath('/html/body/c-wiz[2]/div/div[2]/div/c-wiz/div[1]/div/div[1]/div[1]/div[2]/div/div/div/div[1]/div/div/div[2]/input')), 5000);
-    
-    await searchBox.click();
-
-    const searchBox2 = await driver.wait(until.elementLocated(By.xpath(searchXpath)), 5000);
-    
-    await searchBox2.sendKeys(dest, Key.RETURN);
-
-    //results div
+    const resultsDivClass = 'kQb6Eb';
     try {
-      await driver.wait(until.elementLocated(By.className('kQb6Eb')), 5000);
+      await page.waitForSelector('.' + resultsDivClass, { timeout: 5000 });
     } catch(err) {
-      console.log('No res');
+      console.log('CATCH\nNot Found', dest);
       return [];
     }
 
-    await driver.executeScript('window.scrollTo(0, document.querySelector(\'.kQb6Eb\').scrollHeight);');
 
-    const topSights = await driver.findElements(By.xpath('//div[@class="NnEw9 OBk50c T1Yjbc"]'), 5000);
+    await page.evaluate(() => {
+      window.scrollTo(0, document.querySelector('.kQb6Eb').scrollHeight);
+    });
+
+    const topSightsXpath = '//div[@class="NnEw9 OBk50c T1Yjbc"]';
+
+    await page.waitForSelector('xpath/' + topSightsXpath, { timeout: 5000 });
+    const topSights = await page.$x(topSightsXpath);
+    // const imgClass = '.R1Ybne .pzJ1lf';
 
 
     const respArr = await Promise.all(topSights.map(async (sight) => {
-      const placeImg = await sight.findElement(By.className('R1Ybne')).getAttribute('src');
-      const placeName = await sight.findElement(By.xpath('.//div[@class="skFvHc YmWhbc"]')).getText();
-      const placeDesc = await sight.findElement(By.xpath('.//div[@class="nFoFM"]')).getText();
-      
+      const placeImgSelec = await sight.$('.R1Ybne');
+      const placeNameSelec = await sight.$$('xpath/.//div[@class="skFvHc YmWhbc"]');
+      const placeDescSelec = await sight.$$('xpath/.//div[@class="nFoFM"]');
+      const placeName = await page.evaluate((el) => el.textContent, placeNameSelec[0]);
+      const placeDesc = await page.evaluate((el) => el.textContent, placeDescSelec[0]);
+      const placeImg = await page.evaluate((im) => im.src, placeImgSelec);
+
       const respObj = {
         place: placeName,
         desc: placeDesc,
-        image: placeImg 
+        image: placeImg
       }
 
       return respObj;
     }));
 
     return respArr;
-  } catch(err) {
-    console.log('catch');
+
+  } catch (err) {
+    console.log('CATCH\n', err);
     throw 'Internal Server Error';
-    return [];
+    
   } finally {
-    await driver.quit();
+    if(browser) await browser.close();
   }
 }
 
-scrap('Jamshedpur').then( resp => console.log(resp))
-.catch( err => console.log(err));
-module.exports = scrap;
+// scrap('Sikkim').then((resp) => console.log(resp))
+// .catch(() => console.log('Err'));
+// scrap('Kolkata').then((resp) => console.log(resp));
 
+module.exports = scrap;
