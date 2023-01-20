@@ -13,4 +13,6 @@ const connectToDB = async () => {
   }
 }
 
-module.exports = {connectToDB, client};
+const db = 'tours_database';
+
+module.exports = {connectToDB, client, db};

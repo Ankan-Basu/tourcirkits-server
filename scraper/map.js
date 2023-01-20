@@ -1,42 +1,61 @@
-const {Builder, By, Key, until} = require('selenium-webdriver');
-
-// (async function example() {
-//   let driver = await new Builder().forBrowser('chrome').build();
-//   try {
-//     await driver.get('http://www.google.com/ncr');
-//     await driver.findElement(By.name('q')).sendKeys('webdriver', Key.RETURN);
-//     await driver.wait(until.titleIs('webdriver - Google Search'), 1000);
-//   } finally {
-//     await driver.quit();
-//   }
-// })();
-
-let count = 0;
+const puppeteer = require('puppeteer');
 
 const scrap = async(dest) => {
-  const driver = await new Builder().forBrowser('chrome').build();
+  let browser = undefined;
   try {
-    await driver.get('https://www.google.com/maps')
-    const searchBox = await driver.findElement(By.xpath('/html/body/div[3]/div[9]/div[3]/div[1]/div[1]/div/div[2]/form/input'));
-    await searchBox.sendKeys(dest, Key.RETURN);
-    // await driver.sleep(5000);
-    const desc = await driver.wait(until.elementLocated(By.xpath('/html/body/div[3]/div[9]/div[9]/div/div/div[1]/div[2]/div/div[1]/div/div/div[7]/div[1]/span[1]/span[1]')));
+    browser = await puppeteer.launch({
+      headless: false,
+      defaultViewport: false
+    });
 
-    const descStr = await desc.getText()
-    console.log(descStr);
+    const page = await browser.newPage();
+    await page.goto('https://www.google.com/maps');
 
-    const restaurantButton = await driver.wait(until.elementLocated(By.xpath('/html/body/div[3]/div[9]/div[5]/div/div/div/div[1]/div/div/div/div/div[5]/div[2]/div[1]/button')));
-    count++;
+    const searchXpath = '/html/body/div[3]/div[9]/div[3]/div[1]/div[1]/div/div[2]/form/input';
 
-    await restaurantButton.click();
-    await driver.sleep(5000);
+    await page.waitForSelector('xpath/'+searchXpath, {timeout: 5000});
+
+    await page.click('xpath/'+searchXpath);
+    await page.keyboard.type(dest);
+
+    const [response] = await Promise.all([
+      page.waitForNavigation({timeout: 6000}),
+      page.keyboard.press('Enter')
+    ]);
+
+    // const notFoundDivXpath = '/html/body/div[3]/div[9]/div[9]/div/div/div[1]/div[2]/div/div[1]/div/div/div[2]/div[1]/div[1]';
+
+    // xpath full
+    // '/html/body/div[3]/div[9]/div[9]/div/div/div[1]/div[2]/div/div[1]/div/div/div[2]/div[1]/div[1]/div[1]/h1'
+
+    const resNameXpath = '//h1[@class="DUwDvf fontHeadlineLarge"]';
+
+    try {
+      await page.waitForSelector('xpath/'+resNameXpath, {timeout: 5000});
+      console.log('Found');
+    } catch(err) {
+      console.log('Not found');
+      return [];
+    }
+
+    // for (let i=0; i<100000; i++);
+    await page.screenshot({path: 'initial.png'})
+
+    const url = await page.evaluate(() => window.location.href);
+    let coord = url.split('@')[1].split('/')[0].split(',');
+    console.log(coord);
+
+    console.log(url);
+
+    await page.screenshot({path: 'final.png'})
+    
+
   } catch(err) {
-
+    console.log(err);
+    throw 'Internal Server Error';
   } finally {
-    await driver.quit();
+    if (browser) await browser.close();
   }
 }
 
-scrap('Sikkim').then(() => {
-  scrap('Namchi').then(() => console.log(count));
-});
+scrap('Nicco Park, Kolkata');

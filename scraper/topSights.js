@@ -34,6 +34,9 @@ const scrap = async (dest) => {
       console.log('CATCH\nNot Found', dest);
       return [];
     }
+    
+
+    const crossXpath = '/html/body/c-wiz[2]/div/div[2]/div/c-wiz/div/div/div[1]/div[2]/c-wiz/div/div[2]/div/div[2]/div[57]/div/div/div/button/div[3]';
 
 
     await page.evaluate(() => {
@@ -74,9 +77,5 @@ const scrap = async (dest) => {
     if(browser) await browser.close();
   }
 }
-
-// scrap('Sikkim').then((resp) => console.log(resp))
-// .catch(() => console.log('Err'));
-// scrap('Kolkata').then((resp) => console.log(resp));
 
 module.exports = scrap;
