@@ -1,18 +1,18 @@
 {
   "files": {
     "main.css": "/static/css/main.6ad7a64f.chunk.css",
-    "main.js": "/static/js/main.ee31d71d.chunk.js",
-    "main.js.map": "/static/js/main.ee31d71d.chunk.js.map",
+    "main.js": "/static/js/main.be679d24.chunk.js",
+    "main.js.map": "/static/js/main.be679d24.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.40345808.js",
     "runtime-main.js.map": "/static/js/runtime-main.40345808.js.map",
     "static/js/2.2019a0d8.chunk.js": "/static/js/2.2019a0d8.chunk.js",
     "static/js/2.2019a0d8.chunk.js.map": "/static/js/2.2019a0d8.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.7fcd62d259ef4a8facbca7e719ab5a43.js": "/precache-manifest.7fcd62d259ef4a8facbca7e719ab5a43.js",
+    "precache-manifest.4ff1ee297ff16744e220343395fdf873.js": "/precache-manifest.4ff1ee297ff16744e220343395fdf873.js",
     "service-worker.js": "/service-worker.js",
     "static/css/main.6ad7a64f.chunk.css.map": "/static/css/main.6ad7a64f.chunk.css.map",
     "static/js/2.2019a0d8.chunk.js.LICENSE.txt": "/static/js/2.2019a0d8.chunk.js.LICENSE.txt",
-    "static/js/main.ee31d71d.chunk.js.LICENSE.txt": "/static/js/main.ee31d71d.chunk.js.LICENSE.txt",
+    "static/js/main.be679d24.chunk.js.LICENSE.txt": "/static/js/main.be679d24.chunk.js.LICENSE.txt",
     "static/media/ArunachalPradesh.webp": "/static/media/ArunachalPradesh.2dc2df8b.webp",
     "static/media/Assam.webp": "/static/media/Assam.7c11768d.webp",
     "static/media/Bihar.webp": "/static/media/Bihar.bd8ac9eb.webp",
@@ -55,6 +55,6 @@
     "static/js/runtime-main.40345808.js",
     "static/js/2.2019a0d8.chunk.js",
     "static/css/main.6ad7a64f.chunk.css",
-    "static/js/main.ee31d71d.chunk.js"
+    "static/js/main.be679d24.chunk.js"
   ]
 }
