@@ -2,6 +2,7 @@ const { convertCase } = require('../utility/convertCase');
 const topSightsScraper = require('../scraper/topSights');
 const descScraper = require('../scraper/desc');
 const { client, db } = require('../utility/db');
+const {searchHotels} = require('../scraper/booking');
 
 module.exports.getTopSights = async (req, res) => {
   const id = convertCase(req.query.id);
@@ -20,6 +21,10 @@ module.exports.getTopSights = async (req, res) => {
           timestamp: new Date().toJSON()
         }
         if (resArr.length > 0) {
+          //save to db async
+          client.db(db).collection('top_sights').insertOne(resObj);
+          
+          //respond to client
           res.status(200).json(resObj);
         } else {
           res.status(404).json(resObj);
@@ -30,7 +35,7 @@ module.exports.getTopSights = async (req, res) => {
         )
       }
     } else {
-      res.send(dbRes);
+      res.status(200).json(dbRes);
     }
 
   } catch (err) {
@@ -47,11 +52,32 @@ module.exports.getHotels = async (req, res) => {
 
     if (dbRes === null) {
       console.log('Empty');
-      res.status(500).json({ name: id, hotels: [], timestamp: new Date().toJSON() })
+      // res.status(500).json({ name: id, hotels: [], timestamp: new Date().toJSON() })
+      try {
+        console.log('Requesting API');
+        const respArr = await searchHotels(id);
+        const obj = {
+          name: id,
+          hotels: [...respArr],
+          timestamp: new Date().toJSON()
+        };
+
+        //save to db async
+        client.db(db).collection('hotels').insertOne(obj);
+        
+        //respond to client
+        res.status(200).json(obj);
+      } catch (err) {
+        console.log('CATCH Api\n', err);
+        res.status(500).json(
+          { name: id, hotels: [], timestamp: new Date().toJSON() }
+        )
+      }
     } else {
-      res.send(dbRes);
+      res.status(200).json(dbRes);
     }
-  } catch (err) {
+  } catch(err) {
+    console.log('CATCH db\n', err);
     res.status(500).json({ name: id, hotels: [], timestamp: new Date().toJSON() });
   }
 }
