@@ -26,6 +26,12 @@ const getLocation = async (dest) => {
 
 
 const getHotels = async (destId, destType) => {
+    const today = new Date();
+    const tomorrow = new Date();
+    tomorrow.setDate(today.getDate() + 1);
+
+    // console.log(today.toISOString().split('T')[0])
+    // console.log(tomorrow.toISOString().split('T')[0]);
     const options = {
         method: 'GET',
         url: 'https://booking-com.p.rapidapi.com/v1/hotels/search',
@@ -35,9 +41,9 @@ const getHotels = async (destId, destType) => {
             filter_by_currency: 'INR',
             adults_number: '2',
             room_number: '1',
-            checkout_date: '2023-07-16',
+            checkout_date: tomorrow.toISOString().split('T')[0],
             units: 'metric',
-            checkin_date: '2023-07-15',
+            checkin_date: today.toISOString().split('T')[0],
             dest_type: destType,
             locale: 'en-gb',
             // optional
