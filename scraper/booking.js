@@ -4,6 +4,8 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
+//console.log('env1', process.env.B);
+//console.log('env', process.env.API_KEY_HOTELS_1);
 const getLocation = async (dest) => {
     const options = {
         method: 'GET',
@@ -14,7 +16,7 @@ const getLocation = async (dest) => {
             'X-RapidAPI-Host': 'booking-com.p.rapidapi.com'
         }
     };
-
+//console.log('key', process.env.API_KEY_HOTELS_1);
     try {
         const response = await axios.request(options)
         // console.log(response.data[0]);
