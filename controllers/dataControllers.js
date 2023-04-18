@@ -3,6 +3,7 @@ const topSightsScraper = require('../scraper/topSights');
 const descScraper = require('../scraper/desc');
 const { client, db } = require('../utility/db');
 const {searchHotels} = require('../scraper/booking');
+const axios = require('axios');
 
 module.exports.getTopSights = async (req, res) => {
   const id = convertCase(req.query.id);
@@ -107,4 +108,26 @@ module.exports.getDesc = async (req, res) => {
       { name: id, desc: [], timestamp: new Date().toJSON() }
     )
   }
+}
+
+module.exports.getSearch = async (req, res) => {
+  try {
+
+    // const queryStr = req.query.search;
+    
+    const url = 'http://localhost:8000/';
+    // const url = 'https://tourcirkit.com/hotels/?id=Kolkata'
+
+
+    // const x = await fetch(url);
+    
+    const x = await axios.get(url)
+  
+    const data = await x.data;
+    res.status(200).json(data);
+  } catch(err) {
+    console.log("ERR_FLASK", err);
+    res.sendStatus(500);
+  }
+
 }

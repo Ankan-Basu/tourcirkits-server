@@ -2,6 +2,7 @@ const express = require('express');
 const {connectToDB, client} = require('./utility/db');
 const path = require('path');
 const dataRoutes = require('./routes/dataRoutes');
+const { default: axios } = require('axios');
 
 const app = express();
 
