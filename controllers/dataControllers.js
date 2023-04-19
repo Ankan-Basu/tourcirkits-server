@@ -113,9 +113,9 @@ module.exports.getDesc = async (req, res) => {
 module.exports.getSearch = async (req, res) => {
   try {
 
-    // const queryStr = req.query.search;
+    const queryStr = req.query.id;
     
-    const url = 'http://localhost:8000/';
+    const url = `http://localhost:8000/?q=${queryStr}`;
     // const url = 'https://tourcirkit.com/hotels/?id=Kolkata'
 
 
