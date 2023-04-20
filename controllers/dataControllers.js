@@ -124,10 +124,10 @@ module.exports.getSearch = async (req, res) => {
     const x = await axios.get(url)
   
     const data = await x.data;
-    res.status(200).json(data);
+    res.status(200).json({res: data});
   } catch(err) {
     console.log("ERR_FLASK", err);
-    res.sendStatus(500);
+    res.status(500).json({msg: 'Error'});
   }
 
 }

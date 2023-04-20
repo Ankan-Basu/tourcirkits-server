@@ -19,12 +19,17 @@
   "homepage": "https://github.com/Ankan-Basu/tourcirkits-server#readme",
   "dependencies": {
     "axios": "^1.3.5",
+    "bcrypt": "^5.1.0",
+    "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "firefox": "^0.0.1",
     "geckodriver": "^3.2.0",
+    "jsonwebtoken": "^9.0.0",
     "mongodb": "^4.13.0",
+    "mongoose": "^7.0.4",
     "puppeteer": "^19.5.2",
-    "selenium-webdriver": "^4.7.1"
+    "selenium-webdriver": "^4.7.1",
+    "validator": "^13.9.0"
   }
 }
