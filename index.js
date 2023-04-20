@@ -9,6 +9,7 @@ const { default: axios } = require('axios');
 const app = express();
 
 app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.json())
 
 const port = 5000
 
@@ -20,6 +21,11 @@ connectToDB().then(() => {
 
 app.use(dataRoutes);
 app.use('/auth', authRoutes);
+
+app.post('/test', (req, res) => {
+  console.log(req.body);
+  res.json(req.body);
+})
 
 // app.use('/users', isAuthenticated, userRoutes);
 

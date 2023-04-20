@@ -66,7 +66,7 @@ const signupPost = async (req, res) => {
     res.status(400).json(valid);
   } else {
 
-    const data = {...dataReceived, mobileNo:undefined}
+    const data = {...dataReceived}
     console.log(data);
   try {
     const user = await User.create(data);
