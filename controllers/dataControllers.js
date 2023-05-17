@@ -115,7 +115,7 @@ module.exports.getSearch = async (req, res) => {
 
     const queryStr = req.query.id;
     
-    const url = `http://localhost:8000/?q=${queryStr}`;
+    const url = `http://13.232.204.116:5000/?q=${queryStr}`;
     // const url = 'https://tourcirkit.com/hotels/?id=Kolkata'
 
 
