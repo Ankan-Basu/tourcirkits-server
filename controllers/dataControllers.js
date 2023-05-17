@@ -113,14 +113,17 @@ module.exports.getDesc = async (req, res) => {
 module.exports.getSearch = async (req, res) => {
   try {
 
-    const queryStr = req.query.id;
+    const queryStr = await req.query.id;
     
     const url = `http://13.232.204.116:5000/?q=${queryStr}`;
     // const url = 'https://tourcirkit.com/hotels/?id=Kolkata'
 
-
+    // console.log('QUERY', queryStr);
     // const x = await fetch(url);
-    
+    if (!queryStr) {
+      res.status(200).json({res: []});
+      return;
+    }
     const x = await axios.get(url)
   
     const data = await x.data;
